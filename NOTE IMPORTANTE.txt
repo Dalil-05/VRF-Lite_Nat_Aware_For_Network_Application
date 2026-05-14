@@ -38,7 +38,7 @@ Configuration du VRf pour isoler les réseaux LAN1 et LAN2 sur le routeur R1
 	AUTHENTIFIATION MD5 ACTIVE
 	MOT DE PASSE GN3
 	R1, Asbr pour le reseau ospf 1 et ospf 2
-la route par defaut configuré pour l'accèss a internet prend en comptel'addresse net hop de votre passerelle par defaut(192.168.159.2 pour mon cas en l'occurrence)
+la route par defaut configuré pour l'accèss a internet prend en compte l'addresse nex-hop de votre passerelle par defaut (192.168.159.2 pour mon cas en l'occurrence)
 
 
 
