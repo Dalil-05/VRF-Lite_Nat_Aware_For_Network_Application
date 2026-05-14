@@ -20,8 +20,8 @@ DALIL/
 |
 ├── R1.txt
 |
-├── SCREENSHOOT_GNS3.png
-├── SCREENSHOOT_PACKET_TRACER.png
+├── IMAGE GNS3.png
+├── IMAGE PACKET TRACER.png
 ├── TEST_LAN_1.png
 ├── TEST_LAN_2.png
 └── NOTE_IMPORTANTE.txt
@@ -46,20 +46,21 @@ Avoir une idée de la disposition logique et physique des equipements réseau
 ### Objectif : 
 Réaliser une configuration complete des equipements de chaque LAN en procedant de la couche accès vers la couche Core
 - Configuration d'interfaces
-- Configuration OSPF avec authenfication MD5
-- Configuration NTP pour synchronisation d'horloge
-- Configuration DHCP pour attribution automatique d'addresses par VLAN
-- Configuration VTP
-- Configuration MST par instance de vlan
-- Configuration VRRP pour redondance de passerelle
 - Configuration Port Security
 - Configuration BPDU guard et Port-fast
 - Configuration VLAN
 - Configuration des SVI
+- Configuration VTP
+- Configuration VRRP pour redondance de passerelle
+- Configuration MST par instance de vlan
+- Configuration NTP pour synchronisation d'horloge
+- Configuration DHCP pour attribution automatique d'addresses par VLAN
+- Configuration OSPF avec authenfication MD5
+
 
 ## Partie 3 - Configuration VRF-Lite
 ### Objectif :
-Créer les Vrf sur le routeur R1 et l'implementer sur les equipements des LAN et LAN2 ainsi que sur les interfaces concernés.
+Créer les Vrf sur le routeur R1 et l'implementer sur les equipements des LAN1 et LAN2 ainsi que sur les interfaces concernés.
 - Configuration VRF dans les processus OSPF et dans les interfaces
 - Configuration route statique par defaut pour chemin vers internet
 
