@@ -40,7 +40,9 @@ DALIL/
 # 📚 DOCUMENTATION PAR PARTIE
 
 ## Partie 1 - Archcitecture réseau : Disposition physique et logique
+
 ![Disposition logique sous GNS3](/IMAGE%20GNS3.png)
+
 ![Disposition physique sous packet tracer](/IMAGE%20PACKET%20TRACER.png)
 ### Objectif : 
 Avoir une idée de la disposition logique et physique des equipements réseau
@@ -79,14 +81,19 @@ Permettre une connexion internet aux 2 VRF, assurer une translation des addresse
 Le test s'est fait pour chaque LAN comme suit : 
 ## R1
 Il s'agit ici de verifier que le routeur R1 a bien distingué après configuration les routes globales des routes VRF LAN1 et LAN2
-!(/Screen route globale R1.png)
-!(/Screen route VRF LAN1.png)
-!(/Screen route VRF LAN2.png)
+
+![](/Screen%20route%20globale%20R1.png)
+
+![](/Screen%20route%20VRF%20LAN1.png)
+
+![](/Screen%20route%20VRF%20LAN2.png)
+
 ## LAN 1
 - Test ping inter-Vlan dans le meme vrf (pc1 et pc2) : succès ✓
 - Test ping extra-Vlan dans des Vrf different (pc1 et pc5) : echec 
 - Test ping vers l'addresse publique 8.8.8.8 : succès ✓
 - Test ping vers cisco.com : succès ✓
+
 ![Capture d'ecran du test LAN 1](/TEST%20LAN1.png)
 
 ## LAN 2
@@ -94,4 +101,5 @@ Il s'agit ici de verifier que le routeur R1 a bien distingué après configurati
 - Test ping extra-Vlan dans des Vrf different (pc5 et pc1) : echec 
 - Test ping vers l'addresse publique 8.8.8.8 : succès ✓
 - Test ping vers cisco.com : succès ✓
+
 ![Capture d'ecran du test LAN 2](/TEST%20LAN2.png)
