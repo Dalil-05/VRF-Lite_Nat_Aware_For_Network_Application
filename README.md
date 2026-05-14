@@ -1,5 +1,5 @@
-# Solution-vrf-lite-nat-aware-pour-isolation-complete-de-2-reseaux-avec-connectivite-internet
-Projet de configuration réseau GNS-3 de 2 LAN multi-couches isolés et connéctés a internet via VRF-LITE + NAT-AWARE
+# Vrf-lite-nat-aware_for_Network_Isolation_and_Internet_Connectivity
+Ce projet réseau concus sur GNS-3 est un exemple d'utilisation d'un cas ou il y'a lieu d'isoler completement 2 réseaux tout en assurant une connectivité internet ceci a travers le VRF-lite et le NAT-Aware. 2 technologies qui permettent a la fois de rendre transparent le traffic d'un réseau et d'assurer une translation d'addresse efficace pour la connectivité internet.
 # :clipboard: Structure du projet
 
 ```
@@ -22,6 +22,9 @@ DALIL/
 |
 ├── IMAGE GNS3.png
 ├── IMAGE PACKET TRACER.png
+├── Screen route globale R1.png
+├── Screen route VRF LAN1.png
+├── Screen route VRF LAN2.png
 ├── TEST_LAN_1.png
 ├── TEST_LAN_2.png
 └── NOTE_IMPORTANTE.txt
@@ -74,6 +77,11 @@ Permettre une connexion internet aux 2 VRF, assurer une translation des addresse
 
 # 🧪 Tests et validation
 Le test s'est fait pour chaque LAN comme suit : 
+## R1
+Il s'agit ici de verifier que le routeur R1 a bien distingué après configuration les routes globales des routes VRF LAN1 et LAN2
+!(/Screen route globale R1.png)
+!(/Screen route VRF LAN1.png)
+!(/Screen route VRF LAN2.png)
 ## LAN 1
 - Test ping inter-Vlan dans le meme vrf (pc1 et pc2) : succès ✓
 - Test ping extra-Vlan dans des Vrf different (pc1 et pc5) : echec 
