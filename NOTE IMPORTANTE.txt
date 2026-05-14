@@ -1,0 +1,45 @@
+      CONFIGURATION PROTOCOLE MST
+LAN GAUCHE: INSTANCE 1 VLAN 100 ,110 root primary
+	           INSTANCE 2 VLAN  120 ,130 root secondary
+LAN DROITE: INSTANCE 3 VLAN 140 ,150 root primary
+	           INSTANCE 4 VLAN 160 ,170 root secondary
+
+	CONFIGURATION PROTOCOLE VRRP
+-VRRP GROUP pour chaque vlan
+-Addresse VRRP: derniere addresse des réseaux vlan (.254)
+  LAN GAUCHE: DS-A2 MASTER pour vlan 100,110. Prio 150
+	  DS-A3 MASTER pour vlan 120,130. Prio 150	  
+	  DS-A2 BACKUP pour vlan 120,130. Prio 100
+	  DS-A3 BACKUP pour vlan 100,110. Prio 100
+  LAN DROITE: DS-B2 MASTER pour vlan 140,150. Prio 150
+	  DS-A3 MASTER pour vlan 160,170. Prio 150	  
+	  DS-A2 BACKUP pour vlan 160,170. Prio 100
+	  DS-A3 BACKUP pour vlan 140,150. Prio 100
+
+	SERVICE DHCP
+Exclusion de l'addresse vrrp et des 10 premières addresses de chaque reseau
+-passerelle par defaut(addresse vrrp): dernière addresse de chaque réseau vlan
+-dns server: 8.8.8.8
+
+NATIVE VLAN 1001
+Port channel L2 entre les switch DS
+
+Configuration du VRf pour isoler les réseaux LAN1 et LAN2 sur le routeur R1
+---activer le vrf sur les routeurs R2 et R3 ainsi que sur les Switch DS
+--- sur les processsus ospf, ne pas oublier d'ajouter le vrf
+--- ne pas oublier d'ajouter le ip vrf forwading sur les interfaces
+---ajouter la route statique par defaut pour la sortie vers internet sur R1
+---Le transport retour se fait via NAT VRF-AWARE
+
+
+--PROTOCOLE DE ROUTAGE
+	NIVEAU DIST-CORE :
+	PROCESSUS OSPF 1 AREA 0
+	AUTHENTIFIATION MD5 ACTIVE
+	MOT DE PASSE GN3
+	R1, Asbr pour le reseau ospf 1 et ospf 2
+la route par defaut configuré pour l'accèss a internet prend en comptel'addresse net hop de votre passerelle par defaut(192.168.159.2 pour mon cas en l'occurrence)
+
+
+
+

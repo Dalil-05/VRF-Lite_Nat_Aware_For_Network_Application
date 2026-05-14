@@ -1,0 +1,90 @@
+!CONFIGURATION DE BASE
+conf t
+hostname R1
+line console 0
+loggin synchronous
+exec-timeout 0 0
+exit
+no ip domain lookup
+
+!CONFIGURATION DU NTP---
+ntp server 216.239.35.0 prefer
+ntp server 216.239.35.4
+ntp server 216.235.35.8
+ntp master
+
+!CONFIGURATION DU VRF---
+ip vrf LAN1
+rd 1:1
+exit
+ip vrf LAN2
+rd 2:2
+exit
+
+!CONFIGURATION DES INTERFACES---
+int eth0/2
+ip address DHCP
+description lien vers FAI
+ip nat outside
+no shutdown
+
+int eth0/0
+ip vrf forwarding LAN1
+ip ospf message-digest-key 1 md5 GNS3
+ip add	24.40.2.1 255.255.255.252
+description lien vers R2
+ip nat Inside
+no shutdown
+
+int eth0/1
+ip vrf forwarding LAN2
+ip ospf message-digest-key 1 md5 GNS3
+ip address 25.40.2.1 255.255.255.252
+description lien vers R3
+ip nat Inside
+no shutdown
+
+int loop 0
+ip address 1.1.1.1 255.255.255.255
+no shutdown
+exit
+
+
+do show ip int brief
+
+
+!CONFIFURATION DU ROUTAGE OSPF et de la route statique---
+ip route vrf LAN1 0.0.0.0 0.0.0.0 eth0/2 192.168.159.2 global
+ip route vrf LAN2 0.0.0.0 0.0.0.0 ETH0/2 192.168.159.2 global
+
+router ospf 1 vrf LAN1
+area 0 authentication message-digest
+network 24.40.2.0 0.0.0.3 area 0
+network 1.1.1.1 0.0.0.0 area 0
+passive-interface loop 0
+default-information originate
+exit
+
+router ospf 2 vrf LAN2
+area 0 authentication message-digest 
+network 25.40.2.0 0.0.0.3 area 0
+network 5.5.5.5 0.0.0.0 area 0
+passive-interface loop 0
+default-information originate
+exit
+
+
+!CONFIGURATION DU NAT/PAT---
+access-list 1 permit 192.168.100.0 0.0.0.255
+access-list 1 permit 192.168.110.0 0.0.0.255
+access-list 1 permit 192.168.120.0 0.0.0.255
+access-list 1 permit 192.168.130.0 0.0.0.255
+access-list 1 permit 192.168.140.0 0.0.0.255
+access-list 1 permit 192.168.150.0 0.0.0.255
+access-list 1 permit 192.168.160.0 0.0.0.255
+access-list 1 permit 192.168.170.0 0.0.0.255
+
+
+ip nat Inside source list 1 interface eth0/2 vrf LAN1 overload
+ip nat Inside source list 1 interface eth0/2 vrf LAN2 overload
+
