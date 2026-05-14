@@ -1,0 +1,68 @@
+!CONFIGURATION DE BASE---
+conf t
+hostname AC-B2
+line console 0
+loggin synchronous
+exec-timeout 0 0
+exit
+no ip domain lookup
+
+
+
+!CONFIGURATION VTP---
+vtp mode client
+vtp version 2
+vtp domain GNS3
+vtp password Lab123
+
+!CONFIGURATION MST---
+spanning-tree mode mst 
+spanning-tree mst configuration
+name GNS3
+revision 1
+instance 1 vlan 140,150
+instance 2 vlan 160,170
+
+!CONFIGURATION DES INTERFACES ET PORT CHANNEL
+int range ether0/2, ether1/0
+channel-group 1 mode desirable
+
+
+
+int port 1 
+switchport trunk encapsulation dot1q
+switchport trunk native vlan 1001
+switchport mode trunk
+switchport nonegotiate
+switchport trunk allowed vlan 160,170
+
+int eth0/3
+switchport trunk encapsulation dot1q
+switchport trunk native vlan 1001
+switchport mode trunk
+switchport nonegotiate
+switchport trunk allowed vlan 140,150,160,170
+
+
+int eth0/0
+switchport mode access
+switchport access vlan 160
+switchport nonegotiate
+switchport port-security
+switchport port-security maximum 2
+switchport port-security mac-address sticky
+switchport port-security violation shutdown
+spanning-tree portfast
+spanning-tree bpduguard enable 
+
+
+int eth0/1
+switchport mode access
+switchport access vlan 170
+switchport nonegotiate
+switchport port-security
+switchport port-security maximum 2
+switchport port-security mac-address sticky
+switchport port-security violation shutdown
+spanning-tree portfast
+spanning-tree bpduguard enable

@@ -1,0 +1,95 @@
+!CONFIGURATION DE BASE---
+conf t
+hostname R3
+line console 0
+loggin synchronous
+exec-timeout 0 0
+exit
+no ip domain lookup
+
+!CONFIGURATION DU NTP---
+ntp server 1.1.1.1
+
+!CRETAION DU VRF---
+ip vrf LAN2
+rd 2:2
+exit
+
+!CONFIGURATION DES INTERFACES---
+int eth0/0
+ip vrf forwarding LAN2
+ip address 25.40.2.2 255.255.255.252
+ip ospf message-digest-key 1 md5 GNS3
+description lien vers RI
+no shutdown
+
+int eth0/1
+ip address 26.40.2.2 255.255.255.252
+description lien vers R2
+no shutdown
+
+int eth0/3
+ip vrf forwarding LAN2
+ip address 192.168.10.37 255.255.255.252
+ip ospf message-digest-key 1 md5 GNS3
+description lien vers DS-A1
+no shutdown
+
+int eth0/2
+ip vrf forwarding LAN2
+ip address 192.168.10.33 255.255.255.252
+ip ospf message-digest-key 1 md5 GNS3
+description lien vers DS-B1
+no shutdown
+
+int loop 0
+ip address 3.3.3.3 255.255.255.255
+ip ospf message-digest-key 1 md5 GNS3
+no shutdown
+exit
+
+
+!CONFIGURATION DU SERVEUR DHCP---
+ip dhcp excluded-address 192.168.140.1 192.168.140.10
+ip DHCP excluded-address 192.168.140.254
+ip dhcp excluded-address 192.168.150.1 192.168.150.10
+ip DHCP excluded-address 192.168.150.254
+ip dhcp excluded-address 192.168.160.1 192.168.160.10
+ip DHCP excluded-address 192.168.160.254
+ip dhcp excluded-address 192.168.170.1 192.168.170.10
+ip DHCP excluded-address 192.168.170.254
+
+ip DHCP pool vlan140
+network 192.168.140.0 255.255.255.0
+default-router 192.168.140.254
+dns-server 8.8.8.8
+
+ip DHCP pool vlan150
+network 192.168.150.0 255.255.255.0
+default-router 192.168.150.254
+dns-server 8.8.8.8
+
+ip DHCP pool vlan160
+network 192.168.160.0 255.255.255.0
+default-router 192.168.160.254
+dns-server 8.8.8.8
+
+ip DHCP pool vlan170
+network 192.168.170.0 255.255.255.0
+default-router 192.168.170.254
+dns-server 8.8.8.8
+exit
+
+
+!CONFIGURATION DU ROUTAGE---
+router ospf 1 vrf LAN2
+area 0 authentication message-digest
+capability vrf-lite
+network 192.168.10.32 0.0.0.3 area 0
+network 192.168.10.36 0.0.0.3 area 0
+network 25.40.2.0 0.0.0.3 area 0
+network 3.3.3.3 0.0.0.0 area 0
+passive-interface loop 0
+
+
+

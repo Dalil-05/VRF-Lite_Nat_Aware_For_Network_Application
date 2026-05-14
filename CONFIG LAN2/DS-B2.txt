@@ -1,0 +1,154 @@
+!CONFIGURATION DE BASE---
+conf t
+hostname DS-B2
+line console 0
+loggin synchronous
+exec-timeout 0 0
+exit
+no ip domain lookup
+
+!CONFIGURATION DU NTP---
+ntp server 1.1.1.1
+
+!CRETAION DU VRF---
+ip vrf LAN2
+rd 2:2
+
+!CREATION DES VLAN ET CONFIGURATION DU VTP---
+vlan 100
+vlan 110
+vlan 120
+vlan 130
+vlan 140
+vlan 150
+vlan 160
+vlan 170
+vlan 1001
+exit
+vtp mode server
+vtp version 2
+vtp domain GNS3
+vtp password Lab123
+
+
+!CONFIGURATION DES INTERFACES ET DU PORT CHANNEL---
+int eth0/2
+no switchport 
+ip vrf forwarding LAN2
+ip ospf message-digest-key 1 md5 GNS3
+ip address 192.168.10.38 255.255.255.252
+no shutdown
+description lien vers R2
+
+
+int range eth1/0-1
+channel-group 1 mode active
+exit
+
+int eth0/1
+switchport trunk encapsulation dot1q
+switchport trunk native vlan 1001
+switchport mode trunk
+switchport nonegotiate
+switchport trunk allowed vlan 100,110,120,130
+
+
+int range eth1/2, eth0/0
+channel-group 2 mode desirable 
+exit
+
+int loop 0
+ip address 6.6.6.6 255.255.255.255
+no shutdown 
+
+int port 1
+switchport trunk encapsulation dot1q
+switchport trunk native vlan 1001
+switchport mode trunk
+switchport nonegotiate
+switchport trunk allowed vlan 100,110,120,130
+description lien vers DS-B1
+no shutdown
+
+int port 2
+switchport trunk encapsulation dot1q
+switchport trunk native vlan 1001
+switchport mode trunk
+switchport nonegotiate
+switchport trunk allowed vlan 160,170
+exit
+
+
+!CONFIGURATION DU MST PAR INSTANCE DE VLAN---
+spanning-tree mode mst
+spanning-tree mst configuration
+name GNS3
+revision 1
+instance 1 vlan 140,150
+instance 2 vlan 160,170
+spanning-tree mst 2 root primary
+spanning-tree mst 1 root secondary
+
+
+!CONFIGURATION DES SVI, DU RELAY DHCP ET DU VRRP---
+int vlan 140
+ip vrf forwarding LAN2
+ip address 192.168.140.2 255.255.255.0
+ip ospf message-digest-key 1 md5 GNS3
+ip helper-address 192.168.10.37
+vrrp 140 ip 192.168.140.254
+vrrp 140 priority 100
+vrrp 140 timers advertise 1
+vrrp 140 timers learn
+vrrp 140 preempt
+no shutdown
+exit
+
+int vlan 150
+ip vrf forwarding LAN2
+ip address 192.168.150.2 255.255.255.0
+ip ospf message-digest-key 1 md5 GNS3
+ip helper-address 192.168.10.37
+vrrp 150 ip 192.168.150.254
+vrrp 150 priority 100
+vrrp 150 timers advertise 1
+vrrp 150 timers learn
+vrrp 150 preempt
+no shutdown
+exit
+
+int vlan 160
+ip vrf forwarding LAN2
+ip address 192.168.160.2 255.255.255.0
+ip ospf message-digest-key 1 md5 GNS3
+ip helper-address 192.168.10.37
+vrrp 160 ip 192.168.160.254
+vrrp 160 priority 150
+vrrp 160 timers advertise 1
+vrrp 160 timers learn
+vrrp 160 preempt
+no shutdown
+exit
+
+int vlan 170
+ip vrf forwarding LAN2
+ip address 192.168.170.2 255.255.255.0
+ip ospf message-digest-key 1 md5 GNS3
+ip helper-address 192.168.10.37
+vrrp 170 ip 192.168.170.254
+vrrp 170 priority 150
+vrrp 170 timers advertise 1
+vrrp 170 timers learn
+vrrp 170 preempt
+no shutdown
+exit
+
+!CONFIGURATION DU ROUTAGE DYNAMIQUE---
+router ospf 1 vrf LAN2
+area 0 authentication message-digest
+network 192.168.10.36 0.0.0.3 area 0
+network 192.168.140.0 0.0.0.255 area 0
+network 192.168.150.0 0.0.0.255 area 0
+network 192.168.160.0 0.0.0.255 area 0
+network 192.168.170.0 0.0.0.255 area 0
+network 6.6.6.6 0.0.0.0 area 0
